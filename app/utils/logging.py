@@ -3,7 +3,7 @@ import logging
 
 
 
-def setup():
+def setup_log():
 	logging.basicConfig(
         level=logging.INFO,
         format=config.LOG_FORMAT,
