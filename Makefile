@@ -39,3 +39,8 @@ polling:
 
 tree:
 	tree -I 'venv|__p*'
+
+lint:
+	$(VENV)/bin/isort .
+	$(VENV)/bin/black .
+	$(VENV)/bin/flake8 .
