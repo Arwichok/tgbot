@@ -14,6 +14,8 @@ init:
 	python3 -m venv $(VENV)
 	$(VENV)/bin/pip install -r requirements.txt
 
+init_dev: init
+	$(VENV)/bin/pip install -r requirements_dev.txt
 
 test:
 	ENV=.env.test make base
