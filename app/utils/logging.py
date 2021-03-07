@@ -1,5 +1,5 @@
 import logging
-from logging import INFO, DEBUG
+from logging import DEBUG, INFO
 
 from . import config
 

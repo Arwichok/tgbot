@@ -2,7 +2,6 @@ from time import sleep
 
 from environs import Env
 
-
 env = Env()
 env_f = env("ENV", '.env')
 env.read_env(env_f)

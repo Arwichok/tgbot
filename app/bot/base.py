@@ -3,9 +3,9 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from ..models.base import init_db
+from ..utils import config
 from .handlers.base import setup_handlers
 from .middlewares.db import DBMiddleware
-from ..utils import config
 
 
 async def on_startup(dp):

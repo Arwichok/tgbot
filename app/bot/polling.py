@@ -1,6 +1,6 @@
 import asyncio
 
-from .base import init_dp, on_startup, on_shutdown
+from .base import init_dp, on_shutdown, on_startup
 
 
 def run_polling():

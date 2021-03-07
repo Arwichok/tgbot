@@ -1,12 +1,11 @@
 import logging
 
-from aiogram.dispatcher.webhook import (
-    WebhookRequestHandler,
-    DEFAULT_ROUTE_NAME,
-    BOT_DISPATCHER_KEY as DP_KEY)
+from aiogram.dispatcher.webhook import BOT_DISPATCHER_KEY as DP_KEY
+from aiogram.dispatcher.webhook import (DEFAULT_ROUTE_NAME,
+                                        WebhookRequestHandler)
 
 from ..utils import config
-from .base import init_dp, on_startup, on_shutdown
+from .base import init_dp, on_shutdown, on_startup
 
 
 def setup_webhook(app):
