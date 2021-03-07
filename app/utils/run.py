@@ -1,6 +1,3 @@
-import asyncio
-import logging
-
 import aiohttp
 import click
 
@@ -9,7 +6,6 @@ from .logging import setup_log
 from ..bot.polling import run_polling, setup_web_polling
 from ..bot.webhook import setup_webhook
 from ..web.base import setup_web
-
 
 
 @click.group()

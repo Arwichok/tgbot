@@ -3,7 +3,6 @@ import asyncio
 from .base import init_dp, on_startup, on_shutdown
 
 
-
 def run_polling():
     dp = init_dp()
     loop = asyncio.get_event_loop()

@@ -1,16 +1,12 @@
-import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher, executor
 from aiogram.dispatcher.webhook import (
     WebhookRequestHandler,
     DEFAULT_ROUTE_NAME,
-    BOT_DISPATCHER_KEY as DP_KEY
-    )
+    BOT_DISPATCHER_KEY as DP_KEY)
 
 from ..utils import config
 from .base import init_dp, on_startup, on_shutdown
-
 
 
 def setup_webhook(app):
@@ -34,9 +30,9 @@ async def _startup(app):
     dp = app[DP_KEY]
     await dp.bot.set_webhook(config.WH_URL)
     await on_startup(dp)
-    await _welcome(dp)
     if config.SKIP_UPDATES:
         await _skip_updates(dp)
+    logging.info("Start webhook")
 
 
 async def _shutdown(app):
@@ -44,11 +40,6 @@ async def _shutdown(app):
     await on_shutdown(dp)
     await _shutdown_webhook(dp)
     logging.info("Stop webhook")
-
-
-async def _welcome(dp):
-    me = await dp.bot.me
-    logging.info("Start webhook")
 
 
 async def _skip_updates(dp):
