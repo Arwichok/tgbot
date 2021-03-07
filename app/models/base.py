@@ -13,11 +13,11 @@ async def execute(pool, query, *args, **kwargs):
             await conn.execute(query, *args, **kwargs)
 
 
-setup_sql = '''
+setup_sql = """
 CREATE TABLE IF NOT EXISTS users(
     id int PRIMARY KEY,
     started_at date,
     is_stoped bool,
     is_superuser bool DEFAULT false
 )
-'''
+"""

@@ -1,8 +1,7 @@
 import logging
 
 from aiogram.dispatcher.webhook import BOT_DISPATCHER_KEY as DP_KEY
-from aiogram.dispatcher.webhook import (DEFAULT_ROUTE_NAME,
-                                        WebhookRequestHandler)
+from aiogram.dispatcher.webhook import DEFAULT_ROUTE_NAME, WebhookRequestHandler
 
 from ..utils import config
 from .base import init_dp, on_shutdown, on_startup
@@ -15,12 +14,13 @@ def setup_webhook(app):
 
 def _install_bot(app, dp):
     app[DP_KEY] = dp
-    app['_check_ip'] = config.CHECK_IP
+    app["_check_ip"] = config.CHECK_IP
     app.router.add_route(
-        method='*',
+        method="*",
         path=config.WH_PATH,
         handler=WebhookRequestHandler,
-        name=DEFAULT_ROUTE_NAME)
+        name=DEFAULT_ROUTE_NAME,
+    )
     app.on_startup.append(_startup)
     app.on_shutdown.append(_shutdown)
 

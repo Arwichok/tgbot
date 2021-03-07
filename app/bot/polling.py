@@ -30,8 +30,11 @@ async def _on_shutdown_polling(dp):
 def setup_web_polling(app):
     dp = init_dp()
 
-    async def _up(_): await _on_startup_polling(dp)
-    async def _down(_): await _on_shutdown_polling(dp)
+    async def _up(_):
+        await _on_startup_polling(dp)
+
+    async def _down(_):
+        await _on_shutdown_polling(dp)
 
     app.on_startup.append(_up)
     app.on_shutdown.append(_down)

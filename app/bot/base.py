@@ -11,12 +11,12 @@ from .middlewares.db import DBMiddleware
 async def on_startup(dp):
     setup_handlers(dp)
     db_pool = await init_db()
-    logging.info('Startup bot')
+    logging.info("Startup bot")
     # dp.middleware.setup(DBMiddleware(db_pool))
 
 
 async def on_shutdown(dp):
-    logging.info('Shutdown')
+    logging.info("Shutdown")
 
 
 def init_dp():

@@ -6,8 +6,8 @@ from .routes import setup_routes
 
 async def on_startup(app):
     db_pool = await init_db()
-    app['db_pool'] = db_pool
-    logging.info('Startup web')
+    app["db_pool"] = db_pool
+    logging.info("Startup web")
 
 
 def setup_web(app):
