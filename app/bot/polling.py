@@ -8,33 +8,31 @@ def run_polling():
     dp = init_dp()
     loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(on_startup(dp))
-        loop.create_task(dp.start_polling())
+        loop.run_until_complete(_on_startup_polling(dp))
         loop.run_forever()
     except (KeyboardInterrupt, SystemExit):
         pass
     finally:
-        dp.stop_polling()
-        loop.run_until_complete(on_shutdown(dp))
-        loop.run_until_complete(dp.bot.session.close())
+        loop.run_until_complete(_on_shutdown_polling(dp))
 
 
-
-async def _on_startup_web(app):
-    dp = app['dp']
+async def _on_startup_polling(dp):
     await on_startup(dp)
     loop = asyncio.get_event_loop()
     loop.create_task(dp.start_polling())
 
 
-async def _on_shutdown_web(app):
-    dp = app['dp']
+async def _on_shutdown_polling(dp):
     dp.stop_polling()
+    await on_shutdown(dp)
     await dp.bot.session.close()
 
 
 def setup_web_polling(app):
     dp = init_dp()
-    app['dp'] = dp
-    app.on_startup.append(_on_startup_web)
-    app.on_shutdown.append(_on_shutdown_web)
+
+    async def _up(_): await _on_startup_polling(dp)
+    async def _down(_): await _on_shutdown_polling(dp)
+
+    app.on_startup.append(_up)
+    app.on_shutdown.append(_down)
