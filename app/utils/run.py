@@ -8,7 +8,7 @@ from . import config
 from .logging import setup_log
 from ..bot.polling import run_polling, setup_web_polling
 from ..bot.webhook import setup_webhook
-from ..web.routes import setup_routes
+from ..web.base import setup_web
 
 
 
@@ -26,7 +26,6 @@ def polling():
 def web_polling():
     app = init_app()
     setup_web_polling(app)
-    setup_routes(app)
     run_app(app)
 
 
@@ -34,19 +33,18 @@ def web_polling():
 def webhook():
     app = init_app()
     setup_webhook(app)
-    setup_routes(app)
     run_app(app)
 
 
 def init_app():
     app = aiohttp.web.Application()
+    setup_web(app)
     return app
 
 
 async def wsgi():
     app = init_app()
     setup_webhook(app)
-    setup_routes(app)
     return app
 
 

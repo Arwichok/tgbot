@@ -3,7 +3,7 @@ import asyncpg
 
 from aiogram import Bot, Dispatcher
 
-from .. import models
+from ..models.base import init_db
 from .handlers.base import setup_handlers
 #from .middlewares impor DBMiddleware
 from ..utils import config
@@ -12,7 +12,8 @@ from ..utils import config
 
 async def on_startup(dp):
     setup_handlers(dp)
-    logging.info('on_startup')
+    db_pool = await init_db()
+    logging.info('Startup bot')
     ... # dp.middleware.setup(DBMiddleware(pool))
 
 
