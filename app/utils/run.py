@@ -15,7 +15,6 @@ from ..web.routes import setup_routes
 @click.group()
 def cli():
     setup_log()
-    print('cli')
 
 
 @cli.command()
@@ -27,6 +26,7 @@ def polling():
 def web_polling():
     app = init_app()
     setup_web_polling(app)
+    setup_routes(app)
     run_app(app)
 
 
@@ -34,6 +34,7 @@ def web_polling():
 def webhook():
     app = init_app()
     setup_webhook(app)
+    setup_routes(app)
     run_app(app)
 
 
@@ -43,7 +44,10 @@ def init_app():
 
 
 async def wsgi():
-    return init_app()
+    app = init_app()
+    setup_webhook(app)
+    setup_routes(app)
+    return app
 
 
 def run_app(app):

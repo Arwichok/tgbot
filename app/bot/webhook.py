@@ -9,16 +9,12 @@ from aiogram.dispatcher.webhook import (
     )
 
 from ..utils import config
-from . import base
+from .base import init_dp, on_startup, on_shutdown
 
 
 
-def setup_bot(app):
-    bot = Bot(config.TG_BOT_TOKEN)
-    dp = Dispatcher(bot)
-    base.setup(dp)
-    Bot.set_current(bot)
-    Dispatcher.set_current(dp)
+def setup_webhook(app):
+    dp = init_dp()
     _install_bot(app, dp)
 
 
@@ -37,14 +33,15 @@ def _install_bot(app, dp):
 async def _startup(app):
     dp = app[DP_KEY]
     await dp.bot.set_webhook(config.WH_URL)
-    await base.on_startup(dp)
-    await _skip_updates(dp)
+    await on_startup(dp)
     await _welcome(dp)
+    if config.SKIP_UPDATES:
+        await _skip_updates(dp)
 
 
 async def _shutdown(app):
     dp = app[DP_KEY]
-    await base.on_shutdown(dp)
+    await on_shutdown(dp)
     await _shutdown_webhook(dp)
     logging.info("Stop webhook")
 
@@ -55,9 +52,8 @@ async def _welcome(dp):
 
 
 async def _skip_updates(dp):
-    if config.SKIP_UPDATES:
-    	await dp.reset_webhook(True)
-    	await dp.skip_updates()
+    await dp.reset_webhook(True)
+    await dp.skip_updates()
 
 
 async def _shutdown_webhook(dp):
@@ -65,8 +61,3 @@ async def _shutdown_webhook(dp):
     await dp.storage.wait_closed()
     await dp.bot.delete_webhook()
     await dp.bot.session.close()
-
-
-
-def setup_webhook(app):
-    pass
