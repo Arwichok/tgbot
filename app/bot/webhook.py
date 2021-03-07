@@ -67,3 +67,6 @@ async def _shutdown_webhook(dp):
     await dp.bot.session.close()
 
 
+
+def setup_webhook(app):
+    pass

@@ -1,31 +1,50 @@
+import asyncio
 import logging
 
 import aiohttp
-import asyncpg
+import click
 
-from ..models.base import init_db
-from ..bot.webhook import setup_bot
-from ..web.routes import setup_routes
 from . import config
+from .logging import setup_log
+from ..bot.polling import run_polling, setup_web_polling
+from ..bot.webhook import setup_webhook
+from ..web.routes import setup_routes
 
 
 
-def run():
-    aiohttp.web.run_app(init_app(), **config.APP_CONFIG)
+@click.group()
+def cli():
+    setup_log()
+    print('cli')
 
 
-async def init_app():
+@cli.command()
+def polling():
+    run_polling()
+
+
+@cli.command()
+def web_polling():
+    app = init_app()
+    setup_web_polling(app)
+    run_app(app)
+
+
+@cli.command()
+def webhook():
+    app = init_app()
+    setup_webhook(app)
+    run_app(app)
+
+
+def init_app():
     app = aiohttp.web.Application()
-
-    db_pool = await init_db()
-
-    setup_bot(app)
-    setup_routes(app)
-
     return app
 
 
-logging.basicConfig(
-        level=logging.INFO,
-        format=config.LOG_FORMAT,
-        datefmt="%Y-%m-%d %H:%M:%S %z")
+async def wsgi():
+    return init_app()
+
+
+def run_app(app):
+    aiohttp.web.run_app(app, **config.APP_CONFIG)
