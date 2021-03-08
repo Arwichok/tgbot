@@ -4,9 +4,8 @@ WEB_APP = $(PROJECT).utils.run:init_app
 CONFIG  = $(PROJECT).utils.config
 
 
-
 clear:
-	rm -rf $(VENV)
+	# rm -rf $(VENV)
 	find . -type d -name '__pycache__' -exec rm -r {} +
 
 
@@ -41,6 +40,6 @@ tree:
 	tree -I 'venv|__p*'
 
 lint:
-	$(VENV)/bin/isort .
-	$(VENV)/bin/black .
-	$(VENV)/bin/flake8 .
+	flake8 .
+	black .
+	isort .

@@ -1,22 +1,21 @@
-import logging
-
 from aiogram import Bot, Dispatcher
 
 from ..models.base import init_db
 from ..utils import config
 from .handlers.base import setup_handlers
 from .middlewares.db import DBMiddleware
+from .middlewares.log import LogMiddleware
 
 
 async def on_startup(dp):
     setup_handlers(dp)
     db_pool = await init_db()
-    logging.info("Startup bot")
-    # dp.middleware.setup(DBMiddleware(db_pool))
+    dp.middleware.setup(DBMiddleware(db_pool))
+    dp.middleware.setup(LogMiddleware())
 
 
 async def on_shutdown(dp):
-    logging.info("Shutdown")
+    pass
 
 
 def init_dp():
