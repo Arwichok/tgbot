@@ -1,6 +1,7 @@
 import aiohttp
 import click
 
+from .._version import __version__
 from ..bot.polling import run_polling, setup_web_polling
 from ..bot.webhook import setup_webhook
 from ..web.base import setup_web
@@ -30,6 +31,11 @@ def webhook():
     app = init_app()
     setup_webhook(app)
     run_app(app)
+
+
+@cli.command()
+def version():
+    click.echo(__version__)
 
 
 def init_app():

@@ -5,9 +5,9 @@ class DBMiddleware(LifetimeControllerMiddleware):
     def __init__(self, pool):
         super().__init__()
         self.pool = pool
+        self.skip_patterns = None  # ['updates']
 
     async def pre_process(self, obj, data, *args):
-        data["pool"] = self.pool
         db = await self.pool.acquire()
         data["db"] = db
 
