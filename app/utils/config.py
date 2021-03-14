@@ -1,5 +1,6 @@
 from time import sleep
 
+from aiohttp import BasicAuth
 from environs import Env
 
 env = Env()
@@ -11,6 +12,11 @@ SKIP_UPDATES = env.bool("SKIP_UPDATES", True)
 USE_WEBHOOK = env.bool("USE_WEBHOOK", True)
 CHECK_IP = env.bool("CHECK_IP", False)
 SUPERUSER = env.int("SUPERUSER", 0)
+
+PROXY_URL = env("PROXY_URL", "")
+PROXY_LOGIN = env("PROXY_LOGIN", "")
+PROXY_PASSWORD = env("PROXY_PASSWORD", "")
+PROXY_AUTH = BasicAuth(login=PROXY_LOGIN, password=PROXY_PASSWORD)
 
 LOG_FORMAT = env("LOG_FORMAT", None)
 DEBUG = env.bool("DEBUG", True)

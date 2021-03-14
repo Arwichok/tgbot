@@ -1,7 +1,7 @@
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import BotCommand
+from aiogram.types import BotCommand, ParseMode
 from asyncpg.pool import Pool
 
 from ..models.base import init_db
@@ -25,7 +25,11 @@ async def on_shutdown(dp: Dispatcher):
 
 
 def init_dp() -> Dispatcher:
-    bot = Bot(config.TG_BOT_TOKEN)
+    bot = Bot(
+        token=config.TG_BOT_TOKEN,
+        parse_mode=ParseMode.HTML,
+        proxy=config.PROXY_URL,
+        proxy_auth=config.PROXY_AUTH)
     dp = Dispatcher(bot)
     Bot.set_current(bot)
     Dispatcher.set_current(dp)
