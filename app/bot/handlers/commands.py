@@ -6,16 +6,17 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 from aiogram.types import Message
 from asyncpg import Connection
 
-from ...models.user import create_user
+from ...models import user
 from ...utils import funcs
 
 logger = logging.getLogger(__name__)
 
 
 async def start(msg: Message, db: Connection):
+    tg_user: int = msg.from_user
+    await user.create_user(db, tg_user.id)
     await msg.answer("Hello my dear friend!")
-    logger.info(f"{msg.from_user.first_name} {msg.text}")
-    await create_user(db, msg.from_user.id)
+    logger.info(f"{tg_user.first_name} {msg.text}")
 
 
 async def ping(msg: Message):
