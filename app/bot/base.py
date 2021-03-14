@@ -3,12 +3,14 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand, ParseMode
 from asyncpg.pool import Pool
+from aiogram.dispatcher.storage import BaseStorage
 
 from ..models.base import init_db
 from ..utils import config
 from .handlers.base import setup_handlers
 from .middlewares.db import DBMiddleware
 from .middlewares.log import LogMiddleware
+from .states.storage import init_storage
 
 
 async def on_startup(dp: Dispatcher):
@@ -30,7 +32,8 @@ def init_dp() -> Dispatcher:
         parse_mode=ParseMode.HTML,
         proxy=config.PROXY_URL,
         proxy_auth=config.PROXY_AUTH)
-    dp = Dispatcher(bot)
+    storage: BaseStorage = init_storage()
+    dp = Dispatcher(bot, storage=storage)
     Bot.set_current(bot)
     Dispatcher.set_current(dp)
     return dp
