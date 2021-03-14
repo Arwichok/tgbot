@@ -2,9 +2,17 @@
 
 ## Init
 
-### Create virtualenv and install modules
+### Create virtualenv
 
-`make init`
+`make venv`
+
+### Install packages
+
+`make install`
+
+or for dev
+
+`make install_dev`
 
 ### Copy env and set your variables
 
@@ -13,7 +21,9 @@
 ## Start
 
 `make start` 
-or
-`$(VENV)/bin/python3 -m app`
 
-
+## You can start bot as 
+  1. Polling
+  2. Webhook
+  3. Web-Polling (Run Aiohttp App with polling)
+  4. Gunicorn

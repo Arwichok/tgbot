@@ -1,43 +1,50 @@
+include .env
+
 VENV    = venv
 PROJECT = app
-WEB_APP = $(PROJECT).utils.run:init_app
+WSGI = $(PROJECT).utils.run:wsgi
 CONFIG  = $(PROJECT).utils.config
+export PATH := $(PWD)/$(VENV)/bin:$(PATH)
 
 
-clear:
-	# rm -rf $(VENV)
+clean:
+	rm -rf $(VENV)
 	find . -type d -name '__pycache__' -exec rm -r {} +
 
 
-init:
+venv:
 	python3 -m venv $(VENV)
-	$(VENV)/bin/pip install -r requirements.txt
 
-init_dev: init
-	$(VENV)/bin/pip install -r requirements_dev.txt
 
-test:
-	ENV=.env.test make base
+install:
+	pip install -r requirements.txt
+
+
+install_dev: install
+	pip install -r requirements-dev.txts
 
 
 gunicorn:
-	$(VENV)/bin/gunicorn $(WEB_APP) -c python:$(CONFIG)
+	gunicorn $(WSGI) -c python:$(CONFIG)
 
 
 start:
-	$(VENV)/bin/python -m $(PROJECT)
+	python -m $(PROJECT)
 
 
 webhook:
-	USE_WEBHOOK=TRUE $(VENV)/bin/python -m $(PROJECT)
+	python -m $(PROJECT) webhook
 
 
 polling:
-	@echo Not supported
-	USE_WEBHOOK=FALSE $(VENV)/bin/python -m $(PROJECT)
+	python -m $(PROJECT) polling
+
+
+web_polling:
+	python -m $(PROJECT) web-polling
 
 tree:
-	tree -I 'venv|__p*'
+	tree -I 'venv|__p*' --dirsfirst
 
 lint:
 	black .
