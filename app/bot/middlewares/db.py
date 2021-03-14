@@ -1,16 +1,19 @@
 from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
+from asyncpg import Connection
+from asyncpg.pool import Pool
 
 
 class DBMiddleware(LifetimeControllerMiddleware):
-    def __init__(self, pool):
+    def __init__(self, pool: Pool):
         super().__init__()
         self.pool = pool
-        self.skip_patterns = None  # ['updates']
+        self.skip_patterns = []  # ['updates']
 
     async def pre_process(self, obj, data, *args):
-        db = await self.pool.acquire()
+        db: Connection = await self.pool.acquire()
         data["db"] = db
 
     async def post_process(self, obj, data, *args):
-        if db := data.get("db"):
+        db: Connection = data.get("db")
+        if db:
             await db.close()

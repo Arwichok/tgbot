@@ -40,6 +40,6 @@ tree:
 	tree -I 'venv|__p*'
 
 lint:
-	flake8 .
 	black .
+	flake8 .
 	isort .

@@ -2,6 +2,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
+from asyncpg.pool import Pool
 
 from ..models.base import init_db
 from ..utils import config
@@ -12,7 +13,7 @@ from .middlewares.log import LogMiddleware
 
 async def on_startup(dp: Dispatcher):
     setup_handlers(dp)
-    db_pool = await init_db()
+    db_pool: Pool = await init_db()
     dp.middleware.setup(DBMiddleware(db_pool))
     dp.middleware.setup(LogMiddleware())
     await set_my_commands(dp)

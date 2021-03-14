@@ -7,7 +7,7 @@ from .base import init_dp, on_shutdown, on_startup
 
 
 def run_polling():
-    dp = init_dp()
+    dp: Dispatcher = init_dp()
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(_on_startup_polling(dp))
@@ -31,7 +31,7 @@ async def _on_shutdown_polling(dp: Dispatcher):
 
 
 def setup_web_polling(app: Application):
-    dp = init_dp()
+    dp: Dispatcher = init_dp()
 
     async def _up(_):
         await _on_startup_polling(dp)

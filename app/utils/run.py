@@ -1,5 +1,6 @@
 import aiohttp
 import click
+from aiohttp.web import Application
 
 from .._version import __version__
 from ..bot.polling import run_polling, setup_web_polling
@@ -21,14 +22,14 @@ def polling():
 
 @cli.command()
 def web_polling():
-    app = init_app()
+    app: Application = init_app()
     setup_web_polling(app)
     run_app(app)
 
 
 @cli.command()
 def webhook():
-    app = init_app()
+    app: Application = init_app()
     setup_webhook(app)
     run_app(app)
 
@@ -39,16 +40,16 @@ def version():
 
 
 def init_app():
-    app = aiohttp.web.Application()
+    app = Application()
     setup_web(app)
     return app
 
 
 async def wsgi():
-    app = init_app()
+    app: Application = init_app()
     setup_webhook(app)
     return app
 
 
-def run_app(app):
+def run_app(app: Application):
     aiohttp.web.run_app(app, **config.APP_CONFIG)
