@@ -1,10 +1,10 @@
 import logging
 
-from asyncpg import Connection, create_pool
+from asyncpg import create_pool
 from asyncpg.pool import Pool
 
 from ..utils import config
-from . import user
+from .user import setup_user
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ async def init_db() -> Pool:
 async def setup_models(pool: Pool):
     async with pool.acquire() as conn:
         async with conn.transaction():
-            await user.setup(conn)
+            await setup_user(conn)
 
 
 async def execute(pool: Pool, query: str, *args, **kwargs):

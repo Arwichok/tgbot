@@ -1,24 +1,24 @@
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.dispatcher.storage import BaseStorage
 from aiogram.types import BotCommand, ParseMode
 from asyncpg.pool import Pool
-from aiogram.dispatcher.storage import BaseStorage
 
 from ..models.base import init_db
 from ..utils import config
+from .filters.base import setup_filters
 from .handlers.base import setup_handlers
-from .middlewares.db import DBMiddleware
-from .middlewares.log import LogMiddleware
+from .middlewares.base import setup_middlewares
 from .states.storage import init_storage
 
 
 async def on_startup(dp: Dispatcher):
-    setup_handlers(dp)
-    db_pool: Pool = await init_db()
-    dp.middleware.setup(DBMiddleware(db_pool))
-    dp.middleware.setup(LogMiddleware())
+    pool: Pool = await init_db()
     await set_my_commands(dp)
+    setup_middlewares(dp, pool)
+    setup_filters(dp)
+    setup_handlers(dp)
     logging.info("\033[1;34mBotStarted\033[0m")
 
 
@@ -31,7 +31,8 @@ def init_dp() -> Dispatcher:
         token=config.TG_BOT_TOKEN,
         parse_mode=ParseMode.HTML,
         proxy=config.PROXY_URL,
-        proxy_auth=config.PROXY_AUTH)
+        proxy_auth=config.PROXY_AUTH,
+    )
     storage: BaseStorage = init_storage()
     dp = Dispatcher(bot, storage=storage)
     Bot.set_current(bot)
