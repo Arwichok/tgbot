@@ -1,14 +1,13 @@
 include .env
 
-VENV    = venv
+VEN = venv
 PROJECT = app
-WSGI = $(PROJECT).utils.run:wsgi
-CONFIG  = $(PROJECT).utils.config
+WSGI = $(PROJECT).utils.runner:wsgi
+CONFIG = $(PROJECT).utils.config
 export PATH := $(PWD)/$(VENV)/bin:$(PATH)
 
 
 clean:
-	rm -rf $(VENV)
 	find . -type d -name '__pycache__' -exec rm -r {} +
 
 
@@ -40,7 +39,7 @@ polling:
 	python -m $(PROJECT) polling
 
 
-web_polling:
+web-polling:
 	python -m $(PROJECT) web-polling
 
 tree:
