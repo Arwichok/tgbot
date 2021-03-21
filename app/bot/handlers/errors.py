@@ -10,7 +10,7 @@ from ...models.user import User
 
 async def bot_blocked_error(update: Update, exception, db: Connection):
     user_id: int = update.message.from_user.id
-    await User.do_not_disturb(db, user_id)
+    await User.stop(db, user_id)
     logging.warning(f"User: {user_id} blocked bot")
     return True
 

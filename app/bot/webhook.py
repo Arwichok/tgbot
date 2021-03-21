@@ -1,8 +1,11 @@
 import logging
 
 from aiogram import Dispatcher
-from aiogram.dispatcher.webhook import (BOT_DISPATCHER_KEY, DEFAULT_ROUTE_NAME,
-                                        WebhookRequestHandler)
+from aiogram.dispatcher.webhook import (
+    BOT_DISPATCHER_KEY,
+    DEFAULT_ROUTE_NAME,
+    WebhookRequestHandler,
+)
 from aiohttp.web import Application
 
 from ..utils import config

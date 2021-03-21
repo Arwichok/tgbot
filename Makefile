@@ -47,6 +47,6 @@ tree:
 	tree -I 'venv|__p*' --dirsfirst
 
 lint:
+	isort .
 	black .
 	flake8 .
-	isort .
