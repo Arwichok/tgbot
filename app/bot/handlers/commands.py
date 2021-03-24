@@ -2,7 +2,7 @@ import logging
 import time
 
 from aiogram import Dispatcher
-from aiogram.dispatcher.filters.builtin import CommandStart
+from aiogram.dispatcher.filters.builtin import CommandHelp, CommandStart
 from aiogram.types import Message
 from asyncpg import Connection
 
@@ -24,7 +24,7 @@ async def ping(msg: Message):
     pong_msg: Message = await msg.answer("pong")
     delta: int = funcs.delta_time(start)
     await pong_msg.edit_text(f"{delta}ms")
-    logger.info(f"{msg.from_user.first_name} {msg.text} -> {delta}ms")
+    logger.info(f"{msg.from_user.first_name} /ping -> {delta}ms")
 
 
 async def help_cmd(msg: Message):
@@ -34,4 +34,4 @@ async def help_cmd(msg: Message):
 def setup(dp: Dispatcher):
     dp.register_message_handler(start, CommandStart())
     dp.register_message_handler(ping, commands=["ping"])
-    dp.register_message_handler(help_cmd, commands=["help"])
+    dp.register_message_handler(help_cmd, CommandHelp())

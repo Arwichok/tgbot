@@ -16,7 +16,8 @@ async def bot_blocked_error(update: Update, exception, db: Connection):
 
 
 async def errors(update: Update, exception: Exception):
-    logging.error(f"Error: {exception} \nin Update: {update}")
+    logging.error(f"Error: {exception}")
+    logging.debug(f"Update {update}")
 
 
 def setup(dp: Dispatcher):

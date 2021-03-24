@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram import Dispatcher
 from aiohttp.web import Application
@@ -32,6 +33,7 @@ async def _on_shutdown_polling(dp: Dispatcher):
 
 def setup_web_polling(app: Application):
     dp: Dispatcher = init_dp()
+    logging.warning("\033[1;31mDO NOT USE FOR PRODUCTION\033[0m")
 
     async def _up(_):
         await _on_startup_polling(dp)

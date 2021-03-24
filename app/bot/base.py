@@ -1,5 +1,3 @@
-import logging
-
 from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.storage import BaseStorage
 from aiogram.types import BotCommand, ParseMode
@@ -19,7 +17,6 @@ async def on_startup(dp: Dispatcher):
     setup_middlewares(dp, pool)
     setup_filters(dp)
     setup_handlers(dp)
-    logging.info("\033[1;34mBotStarted\033[0m")
 
 
 async def on_shutdown(dp: Dispatcher):
@@ -42,5 +39,9 @@ def init_dp() -> Dispatcher:
 
 async def set_my_commands(dp: Dispatcher):
     await dp.bot.set_my_commands(
-        [BotCommand("/start", "🟢 Setup bot"), BotCommand("/ping", "🏓 Pong")]
+        [
+            BotCommand("/start", "🟢 Setup bot"),
+            BotCommand("/ping", "🏓 Pong"),
+            BotCommand("/help", "Help page"),
+        ]
     )
