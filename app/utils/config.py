@@ -9,7 +9,6 @@ env.read_env(env_f)
 
 TG_BOT_TOKEN = env("TG_BOT_TOKEN", None)
 SKIP_UPDATES = env.bool("SKIP_UPDATES", True)
-USE_WEBHOOK = env.bool("USE_WEBHOOK", True)
 CHECK_IP = env.bool("CHECK_IP", False)
 SUPERUSER = env.int("SUPERUSER", 0)
 
@@ -28,7 +27,7 @@ WH_URL = env("WH_URL", WH_HOST + WH_PATH)
 LC_HOST = env.str("LC_HOST", "localhost")
 LC_PORT = env.int("LC_PORT", 8080)
 LC_BIND = env.str("LC_BIND", f"{LC_HOST}:{LC_PORT}")
-APP_CONFIG = {"host": LC_HOST, "port": LC_PORT}
+WEB_APP = {"host": LC_HOST, "port": LC_PORT}
 
 PGHOST = env("PGHOST", "localhost")
 PGPORT = env.int("PGPORT", 5432)

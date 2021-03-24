@@ -16,7 +16,7 @@ or for dev
 
 ### Copy env and set your variables
 
-`cp fs/copy.env .env`
+`cp .env.dist .env`
 
 ## Start
 

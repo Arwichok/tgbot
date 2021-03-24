@@ -52,4 +52,4 @@ async def wsgi():
 
 
 def run_app(app: Application):
-    aiohttp.web.run_app(app, **config.APP_CONFIG)
+    aiohttp.web.run_app(app, **config.WEB_APP)
