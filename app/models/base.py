@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from asyncpg import create_pool
 from asyncpg.pool import Pool
@@ -13,23 +14,12 @@ def init_pool() -> Pool:
     return create_pool(**config.PGCONFIG)
 
 
-async def init_db() -> Pool:
+async def startup_db(pool: Pool):
     try:
-        pool: Pool = await create_pool(**config.PGCONFIG)
-        await setup_models(pool)
-        return pool
+        await pool
+        async with pool.acquire() as conn:
+            async with conn.transaction():
+                await setup_user(conn)
     except ConnectionRefusedError as e:
-        logger.error(e)
-        exit(0)
-
-
-async def setup_models(pool: Pool):
-    async with pool.acquire() as conn:
-        async with conn.transaction():
-            await setup_user(conn)
-
-
-async def execute(pool: Pool, query: str, *args, **kwargs):
-    async with pool.acquire() as conn:
-        async with conn.transaction():
-            await conn.execute(query, *args, **kwargs)
+        logger.error(f"Filed connection to Postgresql: {e}")
+        sys.exit(1)

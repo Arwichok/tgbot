@@ -38,10 +38,10 @@ async def restrict_superuser(msg: Message, db: Connection, user_arg):
         return
     super_id = user_arg.id
     name = user_arg.first_name
-    link = md.hlink(name, f"tg://user?id={super_id}")
+    mention = user_arg.get_mention()
 
     await User.restrict_super(db, super_id)
-    await msg.answer(f"{link} restricted to user")
+    await msg.answer(f"{mention} restricted to user")
     logging.info(f"Restricted to user {name}({super_id})")
 
 

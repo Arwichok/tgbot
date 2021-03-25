@@ -1,9 +1,10 @@
 from aiogram import Bot, Dispatcher
+from aiogram.bot.api import TelegramAPIServer
 from aiogram.dispatcher.storage import BaseStorage
 from aiogram.types import BotCommand, ParseMode
 from asyncpg.pool import Pool
 
-from ..models.base import init_db, setup_models
+from ..models.base import startup_db
 from ..utils import config
 from .filters.base import setup_filters
 from .handlers.base import setup_handlers
@@ -12,9 +13,8 @@ from .states.storage import init_storage
 
 
 async def on_startup(dp: Dispatcher, pool: Pool):
-    await pool
+    await startup_db(pool)
     await set_my_commands(dp)
-    await setup_models(pool)
     setup_middlewares(dp, pool)
     setup_filters(dp)
     setup_handlers(dp)
@@ -24,12 +24,13 @@ async def on_shutdown(dp: Dispatcher):
     pass
 
 
-def init_dp(token: str=config.TG_BOT_TOKEN) -> Dispatcher:
+def init_dp(token: str = config.TG_BOT_TOKEN) -> Dispatcher:
     bot = Bot(
         token=token,
         parse_mode=ParseMode.HTML,
         proxy=config.PROXY_URL,
         proxy_auth=config.PROXY_AUTH,
+        server=TelegramAPIServer.from_base(config.TG_API_SERVER),
     )
     storage: BaseStorage = init_storage()
     dp = Dispatcher(bot, storage=storage)
@@ -43,6 +44,6 @@ async def set_my_commands(dp: Dispatcher):
         [
             BotCommand("/start", "🟢 Setup bot"),
             BotCommand("/ping", "🏓 Pong"),
-            BotCommand("/help", "Help page"),
+            BotCommand("/help", "? Help page"),
         ]
     )

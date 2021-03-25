@@ -5,10 +5,10 @@ from aiohttp.web import Application
 from .._version import __version__
 from ..bot.polling import run_polling, setup_web_polling
 from ..bot.webhook import setup_webhook
+from ..models.base import init_pool
 from ..web.base import setup_web
 from . import config
 from .logging import setup_log
-from ..models.base import init_pool
 
 
 @click.group()

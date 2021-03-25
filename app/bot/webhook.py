@@ -14,11 +14,7 @@ from .base import init_dp, on_shutdown, on_startup
 
 def setup_webhook(app: Application):
     dp: Dispatcher = init_dp()
-    _install_bot_to_app(app, dp)
-
-
-def _install_bot_to_app(app: Application, dp: Dispatcher):
-    app[BOT_DISPATCHER_KEY] = dp
+    app[BOT_DISPATCHER_KEY] = app["dp"] = dp
     app["_check_ip"] = config.CHECK_IP
     app.router.add_route(
         method="*",
@@ -32,10 +28,10 @@ def _install_bot_to_app(app: Application, dp: Dispatcher):
 
 async def _startup(app: Application):
     dp: Dispatcher = app[BOT_DISPATCHER_KEY]
-    await dp.bot.set_webhook(config.WH_URL)
-    await on_startup(dp, app["pool"])
     if config.SKIP_UPDATES:
         await _skip_updates(dp)
+    await dp.bot.set_webhook(config.WH_URL)
+    await on_startup(dp, app["pool"])
     logging.info("Start webhook")
 
 
