@@ -3,7 +3,7 @@ from aiogram.dispatcher.storage import BaseStorage
 from aiogram.types import BotCommand, ParseMode
 from asyncpg.pool import Pool
 
-from ..models.base import init_db
+from ..models.base import init_db, setup_models
 from ..utils import config
 from .filters.base import setup_filters
 from .handlers.base import setup_handlers
@@ -11,9 +11,10 @@ from .middlewares.base import setup_middlewares
 from .states.storage import init_storage
 
 
-async def on_startup(dp: Dispatcher):
-    pool: Pool = await init_db()
+async def on_startup(dp: Dispatcher, pool: Pool):
+    await pool
     await set_my_commands(dp)
+    await setup_models(pool)
     setup_middlewares(dp, pool)
     setup_filters(dp)
     setup_handlers(dp)
@@ -23,9 +24,9 @@ async def on_shutdown(dp: Dispatcher):
     pass
 
 
-def init_dp() -> Dispatcher:
+def init_dp(token: str=config.TG_BOT_TOKEN) -> Dispatcher:
     bot = Bot(
-        token=config.TG_BOT_TOKEN,
+        token=token,
         parse_mode=ParseMode.HTML,
         proxy=config.PROXY_URL,
         proxy_auth=config.PROXY_AUTH,

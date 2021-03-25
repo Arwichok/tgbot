@@ -9,6 +9,10 @@ from .user import setup_user
 logger = logging.getLogger(__name__)
 
 
+def init_pool() -> Pool:
+    return create_pool(**config.PGCONFIG)
+
+
 async def init_db() -> Pool:
     try:
         pool: Pool = await create_pool(**config.PGCONFIG)

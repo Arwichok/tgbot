@@ -1,6 +1,6 @@
 include .env
 
-VEN = venv
+VENV = venv
 PROJECT = app
 WSGI = $(PROJECT).utils.runner:wsgi
 CONFIG = $(PROJECT).utils.config
@@ -19,8 +19,8 @@ install:
 	pip install -r requirements.txt
 
 
-install_dev: install
-	pip install -r requirements-dev.txts
+install-dev: install
+	pip install -r requirements-dev.txt
 
 
 gunicorn:

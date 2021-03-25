@@ -8,6 +8,7 @@ from ..bot.webhook import setup_webhook
 from ..web.base import setup_web
 from . import config
 from .logging import setup_log
+from ..models.base import init_pool
 
 
 @click.group()
@@ -42,6 +43,7 @@ def version():
 def init_app():
     app = Application()
     setup_web(app)
+    app["pool"] = init_pool()
     return app
 
 

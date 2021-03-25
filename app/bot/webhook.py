@@ -33,7 +33,7 @@ def _install_bot_to_app(app: Application, dp: Dispatcher):
 async def _startup(app: Application):
     dp: Dispatcher = app[BOT_DISPATCHER_KEY]
     await dp.bot.set_webhook(config.WH_URL)
-    await on_startup(dp)
+    await on_startup(dp, app["pool"])
     if config.SKIP_UPDATES:
         await _skip_updates(dp)
     logging.info("Start webhook")
