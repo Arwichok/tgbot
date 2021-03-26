@@ -1,4 +1,4 @@
-from .utils.runner import cli
+from .utils.cli import cli
 
 if __name__ == "__main__":
     cli()
