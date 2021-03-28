@@ -1,53 +1,52 @@
 from time import sleep
 
-from aiohttp import BasicAuth
 from environs import Env
 
 env = Env()
-env_f = env("ENV", ".env")
-env.read_env(env_f)
+ENV_FILE = env("ENV", ".env")
+env.read_env(ENV_FILE)
 
-TG_BOT_TOKEN = env("TG_BOT_TOKEN", None)
-SKIP_UPDATES = env.bool("SKIP_UPDATES", True)
-CHECK_IP = env.bool("CHECK_IP", False)
-SUPERUSER = env.int("SUPERUSER", 0)
+# Telegram Bot
 TG_API_SERVER = env("TG_API_SERVER", "https://api.telegram.org")
+TG_BOT_TOKEN = env("TG_BOT_TOKEN", None)
+TG_BOT_ID = TG_BOT_TOKEN.split(":")[0]
+SKIP_UPDATES = env.bool("SKIP_UPDATES", True)
+SUPERUSER = env.int("SUPERUSER", 0)
 
-PROXY_URL = env("PROXY_URL", "")
-PROXY_LOGIN = env("PROXY_LOGIN", "")
-PROXY_PASSWORD = env("PROXY_PASSWORD", "")
-PROXY_AUTH = BasicAuth(login=PROXY_LOGIN, password=PROXY_PASSWORD)
+# Telegram Client
+TG_API_ID = env.int("TG_API_ID")
+TG_API_HASH = env("TG_API_HASH")
 
+# Logging
 LOG_FORMAT = env("LOG_FORMAT", None)
-DEBUG = env.bool("DEBUG", True)
+DEBUG = env.bool("DEBUG", False)
 
+# Proxy
+PROXY_URL = env("PROXY_URL", "")
+PROXY_AUTH = {"login": env("PROXY_LOGIN", ""), "password": env("PROXY_PASSWORD", "")}
+
+# Webhook
+CHECK_IP = env.bool("CHECK_IP", False)
 WH_HOST = env("WH_HOST", "example.com")
-WH_PATH = env("WH_PATH", "/")
-WH_URL = env("WH_URL", f"https://{WH_HOST+WH_PATH}")
+WH_PATH = env("WH_PATH", "/webhook")
+WH_URL = f"https://{WH_HOST+WH_PATH}"
 
-LC_HOST = env.str("LC_HOST", "localhost")
-LC_PORT = env.int("LC_PORT", 8080)
-LC_BIND = env.str("LC_BIND", f"{LC_HOST}:{LC_PORT}")
-WEB_APP = {"host": LC_HOST, "port": LC_PORT}
+# Web app
+WEB_APP = {"host": env.str("APP_HOST", "127.0.0.1"), "port": env.int("APP_PORT", 8080)}
 
-PGHOST = env("PGHOST", "localhost")
-PGPORT = env.int("PGPORT", 5432)
-PGUSER = env("PGUSER", "postgres")
-PGPASSWORD = env("PGPASSWORD", "postgres")
-PGDATABASE = env("PGDATABASE", "postgres")
+# PostgreSQL
 PGCONFIG = {
-    "host": PGHOST,
-    "port": PGPORT,
-    "user": PGUSER,
-    "password": PGPASSWORD,
-    "database": PGDATABASE,
+    "host": env("PGHOST", "127.0.0.1"),
+    "port": env.int("PGPORT", 5432),
+    "user": env("PGUSER", "postgres"),
+    "password": env("PGPASSWORD", "postgres"),
+    "database": env("PGDATABASE", "postgres"),
 }
 
-
-# gunicorn config
-bind = LC_BIND
+# Gunicorn
+bind = "{host}:{port}".format(**WEB_APP)
 worker_class = "aiohttp.GunicornWebWorker"
-workers = 1
+workers = env.int("WORKERS", 1)
 timeout = 60
 keepalive = 2
 

@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.bot.api import TelegramAPIServer
 from aiogram.dispatcher.storage import BaseStorage
 from aiogram.types import BotCommand, ParseMode
+from aiohttp import BasicAuth
 from asyncpg.pool import Pool
 
 from ..models.base import startup_db
@@ -29,7 +30,7 @@ def init_dp(token: str = config.TG_BOT_TOKEN) -> Dispatcher:
         token=token,
         parse_mode=ParseMode.HTML,
         proxy=config.PROXY_URL,
-        proxy_auth=config.PROXY_AUTH,
+        proxy_auth=BasicAuth(**config.PROXY_AUTH),
         server=TelegramAPIServer.from_base(config.TG_API_SERVER),
     )
     storage: BaseStorage = init_storage()
