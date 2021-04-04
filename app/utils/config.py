@@ -27,9 +27,9 @@ PROXY_AUTH = {"login": env("PROXY_LOGIN", ""), "password": env("PROXY_PASSWORD",
 
 # Webhook
 CHECK_IP = env.bool("CHECK_IP", False)
-WH_HOST = env("WH_HOST", "example.com")
+WH_HOST = env("WH_HOST", "https://example.com")
 WH_PATH = env("WH_PATH", "/webhook")
-WH_URL = f"https://{WH_HOST+WH_PATH}"
+WH_URL = f"{WH_HOST+WH_PATH}"
 
 # Web app
 WEB_APP = {"host": env.str("APP_HOST", "127.0.0.1"), "port": env.int("APP_PORT", 8080)}
